@@ -1,0 +1,22 @@
+title = "Example Notes"
+description = "A LaTeX book, Markdown notes and PDFs, built into one site by notes-site."
+label = "Notes"
+storage = "example-notes"
+
+[[group]]
+name = "LaTeX books"
+path = "Books"
+
+[[group]]
+name = "Markdown"
+path = "Markdown"
+
+[[group]]
+name = "PDFs"
+path = "PDFs"
+
+[latex]
+preamble = "common/preamble.tex"
+
+[deploy]
+cloudflare_project = "notes-site-example"

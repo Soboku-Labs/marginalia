@@ -1,0 +1,6 @@
+node_modules/
+dist/
+_site/
+.notes-site/
+example/_site/
+example/.notes-site/
