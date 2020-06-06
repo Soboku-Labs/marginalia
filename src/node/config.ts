@@ -1,4 +1,4 @@
-// notes-site.toml: what the site is called and where its documents are.
+// marginalia.toml: what the site is called and where its documents are.
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { parse } from "smol-toml";
@@ -45,7 +45,7 @@ export interface Config {
   deploy: { cloudflareProject?: string };
 }
 
-const FILE = "notes-site.toml";
+const FILE = "marginalia.toml";
 
 function str(v: unknown, fallback: string): string {
   return typeof v === "string" ? v : fallback;
@@ -77,9 +77,9 @@ export function loadConfig(rootArg = "."): Config {
     label: str(raw.label, "Notes"),
     repo: str(raw.repo, "").replace(/\/+$/, ""),
     branch: str(raw.branch, "main"),
-    storage: str(raw.storage, "notes-site"),
+    storage: str(raw.storage, "marginalia"),
     out: resolve(root, str(raw.out, "_site")),
-    cache: resolve(root, str(raw.cache, ".notes-site")),
+    cache: resolve(root, str(raw.cache, ".marginalia")),
     groups: tables(raw.group).map((g) => ({ name: str(g.name, str(g.path, "")), path: str(g.path, "") }))
       .filter((g) => g.path),
     collections: tables(raw.collection).map((c) => ({

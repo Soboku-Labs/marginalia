@@ -1,10 +1,10 @@
 {
-  "name": "notes-site",
-  "version": "0.1.0",
-  "description": "Turn folders of LaTeX books, Markdown notes and PDFs into a notes website with search, highlights, typed notes and handwriting.",
+  "name": "marginalia",
+  "version": "0.2.0",
+  "description": "Marginalia turns folders of LaTeX books, Markdown notes and PDFs into a study website with search, highlights, typed notes, handwriting and AI study tools that use your own model.",
   "type": "module",
   "bin": {
-    "notes-site": "dist/node/cli.js"
+    "marginalia": "dist/node/cli.js"
   },
   "files": [
     "dist",
@@ -14,14 +14,15 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "npm run build:node && npm run build:client",
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && npm run build:node && npm run build:client",
     "build:node": "tsc -p tsconfig.node.json",
-    "build:client": "esbuild src/client/app.ts src/client/notes.ts src/client/ink.ts src/client/nav.ts src/client/pdf.ts --bundle --format=iife --target=es2019 --minify --sourcemap --outdir=dist/client",
+    "build:client": "esbuild src/client/app.ts src/client/notes.ts src/client/ink.ts src/client/nav.ts src/client/pdf.ts src/client/ai.ts --bundle --format=iife --target=es2020 --minify --sourcemap --outdir=dist/client && esbuild src/client/ai-anthropic.ts --bundle --format=esm --target=es2020 --minify --outfile=dist/client/ai-anthropic.mjs",
     "prepare": "npm run build",
     "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.client.json",
     "test": "node dist/node/cli.js check --root example"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0",
     "katex": "0.16.9",
     "pagefind": "1.1.1",
     "pdfjs-dist": "4.10.38",

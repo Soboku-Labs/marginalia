@@ -1,6 +1,6 @@
 node_modules/
 dist/
 _site/
-.notes-site/
+.marginalia/
 example/_site/
-example/.notes-site/
+example/.marginalia/

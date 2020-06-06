@@ -138,6 +138,20 @@ function createFromSelection(color: HighlightColor, withNote: boolean): void {
   if (withNote && marks.length) openPopover(hl.id, marks[0], true);
 }
 
+// An answer from the AI panel, kept as a highlight on the passage it explains.
+document.addEventListener("notes:add-highlight", (e) => {
+  const { pageId, exact, prefix, suffix, comment } = e.detail;
+  const section = sections.find((s) => s.dataset.pageId === pageId);
+  if (!section || !exact) return;
+  const hl: Highlight = { id: newId(), exact, prefix, suffix, color: "blue", comment, created: new Date().toISOString() };
+  const index = textIndex(bodyOf(section));
+  const at = locate(index, hl);
+  if (at >= 0) wrap(index, at, at + exact.length, hl).forEach((m) => m.classList.add("has-comment"));
+  stateOf(section).highlights.push(hl);
+  persist(section);
+  renderPanel();
+});
+
 // ---------------------------------------------------------------- highlight popover
 
 const popover = el("div", { class: "hl-popover hl-ignore", role: "dialog", "aria-label": "Highlight note" });

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// notes-site: build, check, preview and deploy a notes website.
+// marginalia: build, check, preview and deploy a notes website.
 import { spawn } from "node:child_process";
 import { createReadStream, existsSync, statSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
@@ -9,7 +9,7 @@ import { checkMath } from "./checkmath.js";
 import { loadConfig } from "./config.js";
 import { build, buildPdfsOnly } from "./site.js";
 
-const HELP = `notes-site <command> [options]
+const HELP = `marginalia <command> [options]
 
 Commands:
   build     build the website (PDFs of LaTeX books, pages, search index)
@@ -19,10 +19,10 @@ Commands:
   login     log in to Cloudflare in the browser (once per computer)
   deploy    build, then upload to Cloudflare Pages
   upload    upload the already built site
-  init      write a starter notes-site.toml
+  init      write a starter marginalia.toml
 
 Options:
-  --root DIR      project folder with notes-site.toml (default: .)
+  --root DIR      project folder with marginalia.toml (default: .)
   --only NAME     only this collection (code, slug or folder; repeatable; not for deploy)
   --no-pdf        skip compiling LaTeX PDFs (reuse the last ones)
   --force         rebuild every PDF, changed or not
@@ -47,7 +47,7 @@ function npx(args: string[]): Promise<number> {
 
 async function upload(out: string, project: string): Promise<number> {
   if (!existsSync(join(out, "index.html"))) {
-    console.error(`No site in ${out}: run notes-site build (or deploy) first.`);
+    console.error(`No site in ${out}: run marginalia build (or deploy) first.`);
     return 1;
   }
   // Creating the project fails harmlessly when it already exists.
@@ -70,7 +70,7 @@ function serve(dir: string, port: number) {
   }).listen(port, () => console.log(`Serving ${dir} on http://localhost:${port}`));
 }
 
-const STARTER = `# notes-site configuration. Every key is optional.
+const STARTER = `# Marginalia configuration. Every key is optional.
 title = "My Notes"
 description = "Notes I took, as one searchable website."
 label = "Notes"            # what the collections are called in the menu
@@ -115,7 +115,7 @@ async function main(): Promise<number> {
     return command ? 0 : 1;
   }
   if (command === "init") {
-    const file = resolve(values.root ?? ".", "notes-site.toml");
+    const file = resolve(values.root ?? ".", "marginalia.toml");
     if (existsSync(file)) { console.error(`${file} already exists`); return 1; }
     writeFileSync(file, STARTER);
     console.log(`Wrote ${file}`);
@@ -146,14 +146,14 @@ async function main(): Promise<number> {
       return failedPdfs || warnings.length || failures.length ? 1 : 0;
     }
     case "serve":
-      if (!existsSync(join(config.out, "index.html"))) { console.error(`No site in ${config.out}: run notes-site build first.`); return 1; }
+      if (!existsSync(join(config.out, "index.html"))) { console.error(`No site in ${config.out}: run marginalia build first.`); return 1; }
       serve(config.out, Number(values.port));
       return -1; // keep running
     case "login":
       return npx([...WRANGLER, "login"]);
     case "deploy":
     case "upload": {
-      if (!project) { console.error("Set [deploy] cloudflare_project in notes-site.toml."); return 1; }
+      if (!project) { console.error("Set [deploy] cloudflare_project in marginalia.toml."); return 1; }
       if (values.only?.length) { console.error("A deploy replaces the whole site: run it without --only."); return 1; }
       if (command === "deploy") {
         const { failedPdfs } = await build(config, opts);

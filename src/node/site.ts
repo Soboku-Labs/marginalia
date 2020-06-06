@@ -56,7 +56,7 @@ function printPdf(r: { collection: Collection; problems: string[]; pages?: numbe
 
 export async function build(config: Config, opts: BuildOptions = {}): Promise<{ warnings: string[]; failedPdfs: number }> {
   const collections = selected(config, opts.only);
-  if (!collections.length) throw new Error(`no collections found under ${config.root}: add a notes-site.toml or folders of documents`);
+  if (!collections.length) throw new Error(`no collections found under ${config.root}: add a marginalia.toml or folders of documents`);
 
   let failedPdfs = 0;
   if (opts.pdf !== false && collections.some((c) => c.kind === "latex")) {

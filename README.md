@@ -1,4 +1,4 @@
-# notes-site
+# Marginalia
 
 Turn folders of **LaTeX books**, **Markdown notes** and **PDFs** into one notes website:
 
@@ -7,11 +7,12 @@ Turn folders of **LaTeX books**, **Markdown notes** and **PDFs** into one notes 
 - math with KaTeX and LaTeX TikZ pictures as SVG;
 - highlights with comments, typed notes inside the page, and handwriting with an Apple Pencil, mouse or finger, all saved in the browser;
 - PDFs shown in the page with pdf.js, searchable, and you can write on them;
+- **AI study tools with your own model**: ask questions about your notes, explain a selected passage, write and grade practice tests, make flashcards with spaced repetition, and plan your studying up to an exam;
 - one command to deploy to Cloudflare Pages (free, works with private repositories).
 
 ## Install
 
-notes-site runs on Node 18+ and calls a few command-line tools:
+Marginalia runs on Node 18+ and calls a few command-line tools:
 
 | You have | You need |
 |---|---|
@@ -24,10 +25,10 @@ On macOS: `brew install pandoc poppler node`, plus MacTeX for LaTeX books.
 Add it to your notes repository:
 
 ```
-npm install --save-dev github:Vishesh-Gupta/notes-site#v0.1.0
-npx notes-site init        # writes a starter notes-site.toml
-npx notes-site build
-npx notes-site serve       # http://localhost:8000
+npm install --save-dev github:Soboku-Labs/marginalia#v0.2.0
+npx marginalia init        # writes a starter marginalia.toml
+npx marginalia build
+npx marginalia serve       # http://localhost:8000
 ```
 
 ## Your documents
@@ -43,9 +44,9 @@ Each **collection** is a folder:
 
 Images next to the documents (png, jpg, svg, …) are copied over with the same relative paths, so `![x](images/x.svg)` and `\includegraphics{figures/x.png}` just work.
 
-Collections are grouped as `notes-site.toml` says. Without a `[[group]]` or `[[collection]]`, every top-level folder that is a collection is one, and a top-level folder of collections becomes a group.
+Collections are grouped as `marginalia.toml` says. Without a `[[group]]` or `[[collection]]`, every top-level folder that is a collection is one, and a top-level folder of collections becomes a group.
 
-## notes-site.toml
+## marginalia.toml
 
 ```toml
 title = "Course Notes"             # site title
@@ -56,7 +57,7 @@ repo = "https://github.com/me/notes"   # GitHub link and per-collection source b
 branch = "main"
 storage = "my-notes"               # browser storage prefix (keep it fixed: notes are saved under it)
 out = "_site"                      # where the site is written
-cache = ".notes-site"              # figures, converted chapters, PDFs (add to .gitignore)
+cache = ".marginalia"              # figures, converted chapters, PDFs (add to .gitignore)
 
 [[group]]                          # each subfolder of path is a collection
 name = "Mathematics"
@@ -82,20 +83,20 @@ cloudflare_project = "my-notes"
 - The book's own preamble (everything in `main.tex` before `\begin{document}`) and the files it `\input`s give pandoc and KaTeX their `\newcommand`s.
 - `definition`, `example`, `theorem`, `lemma`, `corollary`, `proposition` and `remark` become numbered boxes. A tcolorbox environment named `important` with a title (`\begin{important}[Title]`) becomes a callout.
 - `lstlisting` code is highlighted.
-- Every `tikzpicture` is compiled with the book's engine and shown as SVG, cached by content in `.notes-site/tikz`.
+- Every `tikzpicture` is compiled with the book's engine and shown as SVG, cached by content in `.marginalia/tikz`.
 - `\zh{}`, `\zht{}`, `\ja{}` and `\ko{}` can be mapped to Chinese, Japanese and Korean `lang` spans through `web_macros` (`\renewcommand{\ja}[1]{\foreignlanguage{japanese}{#1}}`).
 
 ## Commands
 
 ```
-notes-site build     PDFs of the LaTeX books, every page, the search index
-notes-site pdf       only the LaTeX books' PDFs
-notes-site check     strict build (fails on any warning) + every formula rendered with KaTeX
-notes-site serve     preview the built site
-notes-site login     log in to Cloudflare in the browser (once per computer)
-notes-site deploy    build, then upload to Cloudflare Pages
-notes-site upload    upload the already built site
-notes-site init      write a starter notes-site.toml
+marginalia build     PDFs of the LaTeX books, every page, the search index
+marginalia pdf       only the LaTeX books' PDFs
+marginalia check     strict build (fails on any warning) + every formula rendered with KaTeX
+marginalia serve     preview the built site
+marginalia login     log in to Cloudflare in the browser (once per computer)
+marginalia deploy    build, then upload to Cloudflare Pages
+marginalia upload    upload the already built site
+marginalia init      write a starter marginalia.toml
 ```
 
 Options: `--root DIR`, `--only NAME` (one collection; repeatable), `--no-pdf` (reuse the last PDFs), `--force` (rebuild every PDF), `--strict`, `--port N`.
@@ -119,12 +120,34 @@ PDFs of LaTeX books fail the build on LaTeX errors, undefined references, missin
 | `a` | add a typed note under the current paragraph (Markdown and `$math$`) |
 | `d` | draw mode (an Apple Pencil always draws; a finger scrolls) |
 | `f` | focus mode |
+| `i` | AI panel: ask, practice tests, flashcards and study plan |
 
 Everything you add is stored in the browser under the `storage` prefix.
 
+## AI study tools (bring your own model)
+
+Press `i` or the ✨ button. Readers choose a provider and model in **⚙ settings** and paste their own key:
+
+| Provider | Notes |
+|---|---|
+| Anthropic (Claude) | through the official Anthropic SDK; default model `claude-opus-5-5` |
+| OpenAI or any OpenAI-compatible server | Ollama, LM Studio, OpenRouter, Groq, vLLM…: set the endpoint, e.g. `http://localhost:11434/v1` (a local server must allow the site's origin, e.g. `OLLAMA_ORIGINS=*`) |
+| Google Gemini | any Gemini model name |
+
+There is no server: requests go straight from the reader's browser to their provider, and the key, tests, flashcards and plans stay in that browser.
+
+| Tool | What it does |
+|---|---|
+| **Ask** | Answers from the chapter being read and the chapters most related to the question, with links to the chapters it used. |
+| **Ask AI** on a selection | Explain, simplify, give an example or summarize the selected passage. *Keep as margin note* saves the answer as a highlight with that comment. |
+| **Test** | Describe the test you want ("12 questions, exam difficulty, two proofs"). It is written from the chapters you pick, then graded with explanations and links back to the notes. Multiple choice, true/false and numeric answers are graded in the browser; written answers are graded by the model with partial credit. Tests and scores are kept. |
+| **Study** | Flashcards from the chapters you pick, reviewed with spaced repetition (Again / Hard / Good / Easy). A day-by-day study plan up to an exam date, with tasks you can tick off. |
+
+Structured output (JSON schemas) is used where the provider supports it, so tests and cards parse reliably. Notes longer than the per-request limit (settings) are shortened evenly, and the panel says so.
+
 ## Deploying
 
-`notes-site deploy` uses Cloudflare Pages through Wrangler. Run `notes-site login` once and set `[deploy] cloudflare_project`. In CI, set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` instead.
+`marginalia deploy` uses Cloudflare Pages through Wrangler. Run `marginalia login` once and set `[deploy] cloudflare_project`. In CI, set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` instead.
 
 ## Developing
 

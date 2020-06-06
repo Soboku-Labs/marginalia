@@ -2,8 +2,8 @@
 
 export const body = document.body;
 
-/** Prefix of every storage key ("<site>:v1:"), from notes-site.toml's storage setting. */
-export const STORE = (body.dataset.store || "notes-site") + ":v1:";
+/** Prefix of every storage key ("<site>:v1:"), from marginalia.toml's storage setting. */
+export const STORE = (body.dataset.store || "marginalia") + ":v1:";
 
 /** The site root (pages know their relative path to it from data-root). */
 export const rootUrl = new URL(body.dataset.root || "./", location.href);

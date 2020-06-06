@@ -59,7 +59,7 @@ function checkIncludes(c: Collection): string[] {
 }
 
 async function compile(c: Collection, dest: string): Promise<{ problems: string[]; pages?: number }> {
-  const out = mkdtempSync(join(tmpdir(), "notes-site-pdf-"));
+  const out = mkdtempSync(join(tmpdir(), "marginalia-pdf-"));
   try {
     const engine = engineOf(c.mainTex ?? "") === "xelatex" ? "-xelatex" : engineOf(c.mainTex ?? "") === "lualatex" ? "-lualatex" : "-pdf";
     const r = await run("latexmk", [engine, "-interaction=nonstopmode", "-halt-on-error", `-outdir=${out}`, "main.tex"], { cwd: c.folder });

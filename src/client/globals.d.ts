@@ -24,6 +24,8 @@ interface AppEventDetail {
   "notes:chapter": { chapter: HTMLElement | null };
   "notes:panel": { open: boolean };
   "ink:changed": undefined;
+  /** An AI answer kept as a highlight with a comment (ai.ts -> notes.ts). */
+  "notes:add-highlight": { pageId: string; exact: string; prefix: string; suffix: string; comment: string };
 }
 
 interface DocumentEventMap {
@@ -31,4 +33,5 @@ interface DocumentEventMap {
   "notes:chapter": CustomEvent<AppEventDetail["notes:chapter"]>;
   "notes:panel": CustomEvent<AppEventDetail["notes:panel"]>;
   "ink:changed": CustomEvent<AppEventDetail["ink:changed"]>;
+  "notes:add-highlight": CustomEvent<AppEventDetail["notes:add-highlight"]>;
 }

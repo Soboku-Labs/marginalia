@@ -1,5 +1,5 @@
 title = "Example Notes"
-description = "A LaTeX book, Markdown notes and PDFs, built into one site by notes-site."
+description = "A LaTeX book, Markdown notes and PDFs, built into one site by Marginalia."
 label = "Notes"
 storage = "example-notes"
 
@@ -19,4 +19,4 @@ path = "PDFs"
 preamble = "common/preamble.tex"
 
 [deploy]
-cloudflare_project = "notes-site-example"
+cloudflare_project = "marginalia-example"

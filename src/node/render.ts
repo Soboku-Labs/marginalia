@@ -12,6 +12,7 @@ const ICONS = {
   pen: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
   search: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
   draw: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3-1 5-4 7-7l3 3c-3 2-6 4-7 7"/><path d="m14 7 3 3"/><path d="M10 14 19.5 4.5a2.1 2.1 0 0 1 3 3L13 17"/></svg>',
+  ai: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg>',
   focus: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
   theme: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>',
 };
@@ -78,6 +79,7 @@ ${o.pdf ? `<link rel="stylesheet" href="${o.root}assets/pdfjs/pdf_viewer.css">\n
   <button class="jump-btn" id="jump-open" aria-label="Jump to (Ctrl+K)">${ICONS.search}<span class="jump-label">Jump to&hellip;</span><kbd class="jump-kbd">Ctrl K</kbd></button>
   <div id="search" class="search"></div>
   <button class="notes-btn" id="notes-toggle" aria-label="Notes (n)" title="Notes (n)">${ICONS.pen}<span class="notes-btn-label">Notes</span><span class="notes-count" id="notes-count" hidden></span></button>
+  <button class="icon-nav ai-btn" id="ai-toggle" aria-label="AI study tools (i)" title="Ask, practice tests and flashcards with your own AI model (i)">${ICONS.ai}</button>
   <button class="icon-nav" id="draw-toggle" aria-label="Draw / handwriting (d)" title="Draw with Apple Pencil, mouse or finger (d)">${ICONS.draw}</button>
   <button class="icon-nav" id="focus-toggle" aria-label="Focus mode (f)" title="Focus mode (f)">${ICONS.focus}</button>
   ${repoLink}
@@ -98,6 +100,7 @@ ${o.tocHtml ?? ""}
 <script defer src="${o.root}assets/notes.js"></script>
 <script defer src="${o.root}assets/ink.js"></script>
 <script defer src="${o.root}assets/nav.js"></script>
+<script defer src="${o.root}assets/ai.js"></script>
 ${o.pdf ? `<script defer src="${o.root}assets/pdf.js"></script>\n` : ""}</body>
 </html>
 `;
@@ -280,7 +283,7 @@ export function copyAssets(assetsDir: string, clientDir: string, pdfjsDir: strin
   const dest = join(out, "assets");
   mkdirSync(dest, { recursive: true });
   copyFileSync(join(assetsDir, "style.css"), join(dest, "style.css"));
-  if (!existsSync(clientDir)) throw new Error(`${clientDir} is missing: run npm run build in notes-site`);
+  if (!existsSync(clientDir)) throw new Error(`${clientDir} is missing: run npm run build in marginalia`);
   for (const f of readdirSync(clientDir)) copyFileSync(join(clientDir, f), join(dest, f));
   if (pdfjsDir) {
     mkdirSync(join(dest, "pdfjs"), { recursive: true });
