@@ -22,7 +22,7 @@
     "test": "node dist/node/cli.js check --root example"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "0.133.0",
+    "@anthropic-ai/sdk": "1.3.0",
     "katex": "0.16.9",
     "pagefind": "1.1.1",
     "pdfjs-dist": "4.10.38",
