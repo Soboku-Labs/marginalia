@@ -13,7 +13,7 @@ jobs:
     name: Type-check, build and check the example site
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install TeX Live, pandoc and poppler
         run: |
