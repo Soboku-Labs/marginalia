@@ -22,7 +22,7 @@ jobs:
             texlive-latex-base texlive-latex-recommended texlive-latex-extra \
             texlive-fonts-recommended texlive-pictures lmodern latexmk pandoc poppler-utils
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: npm
