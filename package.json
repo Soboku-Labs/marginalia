@@ -1,0 +1,36 @@
+{
+  "name": "marginalia",
+  "version": "0.2.0",
+  "description": "Marginalia turns folders of LaTeX books, Markdown notes and PDFs into a study website with search, highlights, typed notes, handwriting and AI study tools that use your own model.",
+  "type": "module",
+  "bin": {
+    "marginalia": "dist/node/cli.js"
+  },
+  "files": [
+    "dist",
+    "assets"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && npm run build:node && npm run build:client",
+    "build:node": "tsc -p tsconfig.node.json",
+    "build:client": "esbuild src/client/app.ts src/client/notes.ts src/client/ink.ts src/client/nav.ts src/client/pdf.ts src/client/ai.ts --bundle --format=iife --target=es2020 --minify --sourcemap --outdir=dist/client && esbuild src/client/ai-anthropic.ts --bundle --format=esm --target=es2020 --minify --outfile=dist/client/ai-anthropic.mjs",
+    "prepare": "npm run build",
+    "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.client.json",
+    "test": "node dist/node/cli.js check --root example"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0",
+    "katex": "0.18.11",
+    "pagefind": "1.1.1",
+    "pdfjs-dist": "4.10.38",
+    "smol-toml": "1.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.2",
+    "esbuild": "0.28.2",
+    "typescript": "5.4.5"
+  }
+}

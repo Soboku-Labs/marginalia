@@ -1,0 +1,16 @@
+\chapter{Sequences}
+
+\section{Convergence}
+
+\begin{definition}
+A sequence $(x_n)$ converges to $x$ if for every $\varepsilon > 0$ there is an $N$ with
+\[ \dist{x_n}{x} < \varepsilon \quad \text{for all } n \ge N. \]
+\end{definition}
+
+\begin{theorem}
+A convergent sequence has exactly one limit.
+\end{theorem}
+
+\begin{proof}
+If $x_n \to x$ and $x_n \to y$, then $\dist{x}{y} \le \dist{x}{x_n} + \dist{x_n}{y} \to 0$.
+\end{proof}
