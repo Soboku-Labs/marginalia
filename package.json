@@ -24,7 +24,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "0.133.0",
     "katex": "0.18.11",
-    "pagefind": "1.1.1",
+    "pagefind": "1.5.2",
     "pdfjs-dist": "4.10.38",
     "smol-toml": "1.9.1"
   },
